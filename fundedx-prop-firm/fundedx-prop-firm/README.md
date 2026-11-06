@@ -1,33 +1,43 @@
-# FundedX — Prop Firm Website (Next.js 14 + Tailwind + Lucide)
+# FundedX: Prop Firm Website (Next.js 14 + Tailwind + Firebase)
 
-UI-first, backend-ready. Visitors see the hero and pricing immediately (no signup wall).
-Clicking **Buy Account** or **Client Portal** opens the auth modal.
+Visitors see the hero and pricing immediately (no signup wall). **Buy Account** / **Client Portal** open the auth modal. Orders and users are saved. You control everything from `/admin`.
 
 ## Run
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build    # production build
+npm run build
 ```
 
-## Where to edit
+## Pages
+
+| URL | What |
+| --- | --- |
+| `/` | Public website (hero, plans, FAQ, footer) |
+| `/dashboard` | Client area: the logged-in user's orders |
+| `/admin` | Admin panel: plans & prices, site content, users, orders |
+
+## Admin panel can change
+
+- Prices for every model and account size, discounts, "Popular" badge, hide/show a model
+- Rules per model: daily loss, drawdown (static/trailing), leverage, profit target, min days, profit split, payouts
+- Brand name, announcement bar, hero text, FAQ (add / edit / reorder / delete)
+- View all users (export CSV) and all orders (set status: pending → paid → active)
+
+## Data modes
+
+- **Demo mode** (no Firebase keys): everything works but is stored only in the current browser.
+- **Live mode** (Firebase keys set): real login, shared database. Follow `FIREBASE_SETUP.md`.
+
+## Files you will edit most
 
 | What | File |
 | --- | --- |
-| Prices, sizes, rules (daily loss, drawdown, targets) | `lib/plans.ts` |
-| Brand name / logo | `components/Logo.tsx`, `app/layout.tsx` |
-| FAQ copy | `components/FaqSection.tsx` |
-| Footer disclaimer | `components/Footer.tsx` |
-| Colors / animations | `tailwind.config.ts`, `app/globals.css` |
-
-All prices and rules are **placeholders**. Replace them with your real numbers.
-
-## Backend stubs (to wire later)
-
-- `lib/auth.ts` — Firebase Auth (Google, email sign-in, sign-up). Snippets are in the comments.
-- `lib/payments.ts` — checkout session. Create `/api/checkout` + a payment webhook.
-- `lib/metaapi.ts` — MetaApi account provisioning (server-side only).
-- `.env.example` — copy to `.env.local` and fill in keys.
-
-Never trust a price sent by the browser; recompute it on the server from `lib/plans.ts`.
+| Default prices/rules (used until admin saves) | `lib/plans.ts` |
+| Default texts / FAQ | `lib/siteConfig.ts` |
+| Database functions | `lib/db.ts` |
+| Login functions | `lib/auth.ts` |
+| Security rules | `firestore.rules` |
+| Payment gateway (next step) | `lib/payments.ts` |
+| MetaApi (next step) | `lib/metaapi.ts` |
